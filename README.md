@@ -35,3 +35,8 @@ send log as "payment-server-01" got hacked and malicious code is running:
 ```
 
 Now check your Splunk 🙂
+
+## video
+
+for more details on research, usage of log-slapper and more:<br>
+[![SIEM SLAM](https://img.youtube.com/vi/m3sLC2WQ1ug/0.jpg)](https://www.youtube.com/watch?v=m3sLC2WQ1ug)
