@@ -1,0 +1,112 @@
+# Log-slapper Configuration File Template
+
+# Splunk Settings:
+splunk:
+  # Specify the IP address of the target log collector (Indexer or Heavy Forwarder).
+  target_ip: "10.10.50.55"
+
+  # Specify the port of the target log collector (Default is 9997).
+  target_port: "9997"
+
+# Log Settings:
+log:
+  # The index in which to store the logs.
+  index: "main"
+
+  # The source field for identifying the source of the log events.
+  source: "/var/log/myapp.log"
+
+  # The sourcetype attribute for categorizing the log data.
+  sourcetype: "my_custom_app"
+
+  # The hostname to be recorded in the log events.
+  hostname: "rawtcp_host1"
+
+# Extra Fields:
+# Add any additional custom fields that should be included in the log data.
+extra_fields:
+  machine_id: "726329955b9a4fb99b9a64bd15999999"
+  host_ip: "10.10.40.40"
+  another_field: "another value"
+  # Add more custom fields here as key-value pairs.
+  # example_field: "example_value"
+
+# Event Settings:
+events:
+  # Specify the time for the log event.
+  # Use the format: "dd/mm/yyyy hh:mm:ss" or a Unix timestamp.
+  - time: "01/01/2024 20:59:59"
+  # Event Data:
+  # Define the event data that should be sent.
+  # This should be a complete event message or structured data.
+    data: |
+      05/30/2024 08:02:00 PM
+      LogName=Security
+      SourceName=Microsoft Windows security auditing.
+      EventCode=4688
+      EventType=0
+      Type=Information
+      ComputerName=DC-03.ozgun.com
+      TaskCategory=Process Creation
+      OpCode=Info
+      RecordNumber=5853
+      Keywords=Audit Success
+      Message=A new process has been created.
+
+      Creator Subject:
+        Security ID:		-
+        Account Name:		ozzyadmin
+        Account Domain:		ozgun.com
+        Logon ID:		0x9BB3354DA
+
+      Target Subject:
+        Security ID:
+        Account Name:
+        Account Domain:
+        Logon ID:
+
+      Process Information:
+        New Process ID:		0x1e4
+        New Process Name:	C:\Users\Public\Documents\mimikatz.exe
+        Token Elevation Type:	%1936
+        Mandatory Label:	Mandatory Label\High Mandatory Level
+        Creator Process ID:	0x11f0
+        Creator Process Name:	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+        Process Command Line:	C:\Users\Public\Documents\mimikatz.exe --encrypt='all'
+    
+  # Example of a second event data entry
+  - time: "01/01/2024 21:00:00"
+    data: |
+      06/01/2024 09:00:00 AM
+      LogName=System
+      SourceName=System Monitoring
+      EventCode=5000
+      EventType=1
+      Type=Warning
+      ComputerName=AppServer-01.ozgun.com
+      TaskCategory=Application Crash
+      OpCode=Warning
+      RecordNumber=9001
+      Keywords=Application Failure
+      Message=An application has unexpectedly quit.
+
+      Creator Subject:
+        Security ID:		-
+        Account Name:		ozzyadmin
+        Account Domain:		ozgun.com
+        Logon ID:		0x9BB5354DA
+
+      Target Subject:
+        Security ID:
+        Account Name:
+        Account Domain:
+        Logon ID:
+
+      Process Information:
+        New Process ID:		0x1e4
+        New Process Name:	C:\Users\Public\Documents\ozgun.exe
+        Token Elevation Type:	%1936
+        Mandatory Label:	Mandatory Label\High Mandatory Level
+        Creator Process ID:	0x11f0
+        Creator Process Name:	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+        Process Command Line:	C:\Users\Public\Documents\ozgun.exe --decrypt='all'

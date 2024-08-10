@@ -2,7 +2,6 @@ package attacks
 
 import (
 	"flag"
-	"fmt"
 	"time"
 
 	"github.com/oz9un/log-slapper/pkg/splunk"
@@ -72,7 +71,8 @@ func ProcessCreateEvent(targetDomain string, targetHostname string, targetIp str
 
 	err := splunk.SendHECEvent(HEC_url, HEC_token, event)
 	if err != nil {
-		fmt.Println("Error sending process creation event\n")
+		pterm.Error.Println("Error sending process creation event\n")
+		return
 	}
 
 	data = append(data, []string{targetHostname, targetIp, processName, processParameters, formattedTime_str})

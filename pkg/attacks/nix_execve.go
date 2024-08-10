@@ -2,7 +2,6 @@ package attacks
 
 import (
 	"flag"
-	"fmt"
 	"time"
 
 	"github.com/oz9un/log-slapper/pkg/splunk"
@@ -58,7 +57,8 @@ func ExecveEvent(targetIp string, targetHostname string, commandName string, HEC
 	event := splunk.GenerateExecveEventFromCommand(formattedTime, commandName, targetIp, targetHostname)
 	err := splunk.SendHECEvent(HEC_url, HEC_token, event)
 	if err != nil {
-		fmt.Println("Error sending execve event\n")
+		pterm.Error.Println("Error sending execve event\n")
+		return
 	}
 
 	data = append(data, []string{targetHostname, targetIp, commandName, formattedTime_str})

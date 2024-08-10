@@ -1,0 +1,50 @@
+# Log-slapper Configuration File Template
+
+# Splunk Settings:
+splunk:
+  # Specify the IP address of the target log collector (Indexer or Heavy Forwarder).
+  target_ip: "192.168.1.100"
+
+  # Specify the port of the target log collector (Default is 9997).
+  target_port: 9997
+
+# Log Settings:
+log:
+  # The index in which to store the logs.
+  index: "main"
+
+  # The source field for identifying the source of the log events.
+  source: "/var/log/myapp.log"
+
+  # The sourcetype attribute for categorizing the log data.
+  sourcetype: "my_custom_app"
+
+  # The hostname to be recorded in the log events.
+  hostname: "server01.mydomain.com"
+
+# Extra Fields:
+# Add any additional custom fields that should be included in the log data.
+extra_fields:
+  machine_id: "726329955b9a4fb99b9a64bd15999999"
+  host_ip: "10.10.40.40"
+  # Add more custom fields here as key-value pairs.
+  # example_field: "example_value"
+
+# Event Settings:
+event:
+  # Specify the time for the log event.
+  # Use the format: "dd/mm/yyyy hh:mm:ss" or a Unix timestamp.
+  time: "31/12/2023 23:59:59"
+
+  # Event Data:
+  # Define the event data that should be sent.
+  # This should be a complete event message or structured data.
+  data: >
+    07/25/2023 04:11:30 AM
+    LogName=Security
+    EventCode=4624
+    EventType=0
+    ComputerName=mycomputer.mydomain.com
+    TaskCategory=Logon
+    OpCode=Info
+    Message=An account was successfully logged on. Subject: Security ID: S-1-5-18

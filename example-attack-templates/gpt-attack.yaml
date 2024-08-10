@@ -1,0 +1,114 @@
+# Log-slapper Configuration File Template
+
+# Splunk Settings:
+splunk:
+  # Specify the IP address of the target log collector (Indexer or Heavy Forwarder).
+  target_ip: "10.10.50.55"
+
+  # Specify the port of the target log collector (Default is 9997).
+  target_port: "9997"
+
+# Log Settings:
+log:
+  # The index in which to store the logs.
+  index: "main"
+
+  # The source field for identifying the source of the log events.
+  source: "WinEventLog:Security"
+
+  # The sourcetype attribute for categorizing the log data.
+  sourcetype: "WinEventLog"
+
+  # The hostname to be recorded in the log events.
+  hostname: "defcon-attack-demo"
+
+# Extra Fields:
+# Add any additional custom fields that should be included in the log data.
+extra_fields:
+  machine_id: "726329955b9a4fb99b9a64bd15999999"
+  host_ip: "13.37.13.37"
+  another_field: "another value"
+  # Add more custom fields here as key-value pairs.
+  # example_field: "example_value"
+  
+# Event Settings:
+events:
+  # Mimikatz execution event
+  - time: "08/08/2021 14:30:00"
+    data: |
+      08/08/2021 02:30:00 PM
+      LogName=Security
+      SourceName=Microsoft Windows security auditing.
+      EventCode=4688
+      EventType=0
+      Type=Information
+      ComputerName=DEFCON-SQL-SERVER-001.defcon-demo.com
+      TaskCategory=Process Creation
+      OpCode=Info
+      RecordNumber=48753
+      Keywords=Audit Success
+      Message=A new process has been created.
+
+      Creator Subject:
+        Security ID:		S-1-5-21-1234567890-2345678901-3456789012-1001
+        Account Name:		DEFCON-ADMIN
+        Account Domain:		defcon-demo.com
+        Logon ID:		0x9BB3354DA
+
+      Target Subject:
+        Security ID:
+        Account Name:
+        Account Domain:
+        Logon ID:
+
+      Process Information:
+        New Process ID:		0x4a0
+        New Process Name:	C:\Windows\Temp\mimikatz.exe
+        Token Elevation Type:	TokenElevationTypeDefault
+        Mandatory Label:	Mandatory Label\High Mandatory Level
+        Creator Process ID:	0x1f4
+        Creator Process Name:	C:\Windows\System32\cmd.exe
+        Process Command Line:	mimikatz.exe "privilege::debug" "sekurlsa::logonpasswords" "exit"
+
+  # Pass-the-Hash attack event
+  - time: "08/08/2021 15:05:00"
+    data: |
+      08/08/2021 03:05:00 PM
+      LogName=Security
+      SourceName=Microsoft Windows security auditing.
+      EventCode=4624
+      EventType=0
+      Type=Information
+      ComputerName=DEFCON-SQL-SERVER-002.defcon-demo.com
+      TaskCategory=Logon
+      OpCode=Info
+      RecordNumber=48754
+      Keywords=Audit Success
+      Message=An account was successfully logged on.
+
+      Subject:
+        Security ID:		NULL SID
+        Account Name:		-
+        Account Domain:		-
+        Logon ID:		0x0
+
+      Logon Information:
+        Logon Type:		9
+        New Logon:
+          Security ID:		S-1-5-21-1234567890-2345678901-3456789012-1001
+          Account Name:		DEFCON-ADMIN
+          Account Domain:		defcon-demo.com
+          Logon ID:		0xABCDE1234
+          Logon GUID:		{00000000-0000-0000-0000-000000000000}
+
+      Network Information:
+        Workstation Name:	DEFCON-SQL-SERVER-001
+        Source Network Address:	192.168.1.101
+        Source Port:		12345
+
+      Detailed Authentication Information:
+        Logon Process:		NtLmSsp 
+        Authentication Package:	NTLM
+        Transited Services:	-
+        Package Name (NTLM only):	NTLM V2
+        Key Length:		128

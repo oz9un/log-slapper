@@ -3,6 +3,7 @@ package replacer
 import (
 	"crypto/sha512"
 	"encoding/hex"
+	"fmt"
 	"strings"
 
 	"github.com/oz9un/log-slapper/pkg/initialize"
@@ -59,7 +60,11 @@ func generateTruncatedSHA512(input string) string {
 }
 
 func UpdateReplacements() {
-	HostInfo_originals, HostInfo_Replacements, HEC_token, HEC_url = initialize.ProcessHostFile()
+	HostInfo_originals, HostInfo_Replacements = initialize.GetHostAndIPDetails()
+	HEC_token, HEC_url = initialize.ProcessSettingsFile()
+
+	HEC_url = "https://" + HEC_url + ":8088/services/collector"
+
 }
 
 func UpdateMachineId() {
@@ -72,6 +77,7 @@ func UpdateMachineId() {
 	// Append the new machine ID to the replacements
 	HostInfo_originals = append(HostInfo_originals, oldMachineID)
 	HostInfo_Replacements = append(HostInfo_Replacements, newMachineID)
+	fmt.Println(HostInfo_originals[0])
 
 	// Print the information using pterm
 	pterm.DefaultSection.WithLevel(2).Println("Machine ID Update")

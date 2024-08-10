@@ -2,7 +2,6 @@ package attacks
 
 import (
 	"flag"
-	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
@@ -63,9 +62,11 @@ func LoginSpamGetInput() (string, string, int, string) {
 	subnetPrompt := pterm.DefaultInteractiveTextInput.WithDefaultValue("10.10.41.0/24")
 	targetSubnet, _ := subnetPrompt.Show("Enter the target subnet")
 
-	timePrompt := pterm.DefaultInteractiveTextInput.WithDefaultValue("24/03/2024 17:16")
-	startTimeStr, _ := timePrompt.Show("Enter the start time")
-	endTimeStr, _ := timePrompt.Show("Enter the end time")
+	timePromptStart := pterm.DefaultInteractiveTextInput.WithDefaultValue("24/03/2024 17:16")
+	timePromptEnd := pterm.DefaultInteractiveTextInput.WithDefaultValue("24/03/2024 17:20")
+
+	startTimeStr, _ := timePromptStart.Show("Enter the start time")
+	endTimeStr, _ := timePromptEnd.Show("Enter the end time")
 
 	// Ask for the count
 	countPrompt := pterm.DefaultInteractiveTextInput.WithDefaultValue("10")
@@ -93,8 +94,8 @@ func LoginEventSpam(count int, domain string, subnet string, HEC_url string, HEC
 		event, hostname, ip := splunk.GenerateLoginEvent(domain, subnet, randomTime, targetAcc)
 		err := splunk.SendHECEvent(HEC_url, HEC_token, event)
 		if err != nil {
-			fmt.Printf("Error sending login event %d: %s\n", i+1, err)
-			continue
+			pterm.Error.Println("Error sending login event %d: %s\n", i+1, err)
+			return
 		}
 		formattedTime := randomTime.Format("2006-01-02 15:04:05 MST")
 		data = append(data, []string{hostname, ip, formattedTime})
@@ -117,8 +118,8 @@ func LoginFailEventSpam(count int, domain string, subnet string, HEC_url string,
 		event, hostname, ip := splunk.GenerateLoginFailedEvent(domain, subnet, randomTime, targetAcc)
 		err := splunk.SendHECEvent(HEC_url, HEC_token, event)
 		if err != nil {
-			fmt.Printf("Error sending login failed event %d: %s\n", i+1, err)
-			continue
+			pterm.Error.Println("Error sending login failed event %d: %s\n", i+1, err)
+			return
 		}
 
 		formattedTime := randomTime.Format("2006-01-02 15:04:05 MST")

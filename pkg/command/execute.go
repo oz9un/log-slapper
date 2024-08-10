@@ -19,11 +19,16 @@ func RunCommand() {
 	spinner, _ := pterm.DefaultSpinner.Start("Setting up IP routing rules for traffic analysis. Please wait...")
 	initialize.IptablesInit()
 	spinner.Success("IPTables initialized")
+	fmt.Println()
+	pterm.FgYellow.Println("Enter the following details to start interception:")
+
+	replacer.UpdateReplacements()
 
 	// Show a spinner while updating machine ID
 	spinner, _ = pterm.DefaultSpinner.Start("Generating new Machine ID...")
 	time.Sleep(2 * time.Second)
 	replacer.UpdateMachineId()
+
 	spinner.Success("New Machine ID generated")
 	fmt.Println()
 

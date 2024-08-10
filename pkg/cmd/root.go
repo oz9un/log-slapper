@@ -33,22 +33,34 @@ var CFG = struct {
 	processParameters string
 	targetIp          string
 	hostname          string
+	file_name         string
 }{}
 
 func interactiveMode() {
 	log.SetOutput(ioutil.Discard)
 	replacer.CommandMap = make(map[string]bool)
 
-	initialize.ChecknCreateHostFile()
+	/* v2
+	//initialize.ChecknCreateSettingsFile(false)
 	replacer.UpdateReplacements()
+	*/
+
+	hec_token, target_indexeruf_ip := initialize.ProcessSettingsFile()
+	hec_url := "https://" + target_indexeruf_ip + ":8088/services/collector"
 
 	// Options for interactive select
 	options := []string{
-		"View current configuration",
-		"Set new config (hostname/ip)",
-		pterm.FgRed.Sprint("Target shell mode (TCP) 👹"),
+		pterm.FgLightWhite.Sprint("View current configuration"),
+		pterm.FgLightWhite.Sprint("Set new config (splunk ip/hec hoken)"),
+		pterm.FgRed.Sprint("Target shell playzone 🤖"),
 		pterm.FgMagenta.Sprint("Built-in attacks (HEC) 🗡"),
 		"Exit",
+	}
+
+	targetShellOptions := []string{
+		pterm.FgRed.Sprint("Create linux_auditd logs [RAW TCP] 👹"),
+		pterm.FgWhite.Sprint("Modify on-the-fly packets from current machine [NEEDS ROOT]"),
+		pterm.FgGray.Sprint("Back to the main menu"),
 	}
 
 	// Options for interactive select
@@ -74,18 +86,18 @@ func interactiveMode() {
 
 	// Use PTerm's interactive select feature
 	for {
-		selectedOption, err := pterm.DefaultInteractiveSelect.WithOptions(options).Show()
+		selectedOption, err := pterm.DefaultInteractiveSelect.WithMaxHeight(10).WithOptions(options).Show()
 		if err != nil {
 			pterm.Error.Println("Something went wrong:", err)
 			return
 		}
 
 		switch {
-		case selectedOption == "View current configuration":
+		case strings.Contains(selectedOption, "View current configuration"):
 			initialize.ViewCurrentConfig()
-		case selectedOption == "Set new config (hostname/ip)":
+		case strings.Contains(selectedOption, "Set new config"):
 			initialize.SetNewConfig()
-			replacer.UpdateReplacements()
+			//replacer.UpdateReplacements()
 		case strings.Contains(selectedOption, "Built-in attacks"):
 			selectedOptionOS, err := pterm.DefaultInteractiveSelect.WithOptions(osOptions).Show("Select the target Operating System")
 			if err != nil {
@@ -102,13 +114,13 @@ func interactiveMode() {
 				switch {
 				case strings.Contains(selectedWindowsAttack, "failed"):
 					targetDomain, targetSubnet, count, targetAcc := attacks.LoginSpamGetInput()
-					attacks.LoginFailEventSpam(count, targetDomain, targetSubnet, replacer.HEC_url, replacer.HEC_token, targetAcc)
+					attacks.LoginFailEventSpam(count, targetDomain, targetSubnet, hec_url, hec_token, targetAcc)
 				case strings.Contains(selectedWindowsAttack, "success"):
 					targetDomain, targetSubnet, count, targetAcc := attacks.LoginSpamGetInput()
-					attacks.LoginEventSpam(count, targetDomain, targetSubnet, replacer.HEC_url, replacer.HEC_token, targetAcc)
+					attacks.LoginEventSpam(count, targetDomain, targetSubnet, hec_url, hec_token, targetAcc)
 				case strings.Contains(selectedWindowsAttack, "process"):
 					targetDomain, targetHostname, targetIp, processName, processParameters, targetAccount := attacks.ProcessCreateGetInput()
-					attacks.ProcessCreateEvent(targetDomain, targetHostname, targetIp, processName, processParameters, targetAccount, replacer.HEC_url, replacer.HEC_token)
+					attacks.ProcessCreateEvent(targetDomain, targetHostname, targetIp, processName, processParameters, targetAccount, hec_url, hec_token)
 				case strings.Contains(selectedWindowsAttack, "Back"):
 					interactiveMode()
 				}
@@ -121,15 +133,32 @@ func interactiveMode() {
 				switch {
 				case strings.Contains(selectedNixAttack, "EXECVE"):
 					command, targetHostname, targetIp := attacks.ExecveGetInput()
-					attacks.ExecveEvent(targetIp, targetHostname, command, replacer.HEC_url, replacer.HEC_token)
+					attacks.ExecveEvent(targetIp, targetHostname, command, hec_url, hec_token)
 				case strings.Contains(selectedNixAttack, "Back"):
 					interactiveMode()
 				}
 			case strings.Contains(selectedOptionOS, "Back"):
 				interactiveMode()
 			}
-		case strings.Contains(selectedOption, "Target shell mode"):
-			command.RunCommand()
+
+		case strings.Contains(selectedOption, "Target shell playzone"):
+			selectedPlayzone, err := pterm.DefaultInteractiveSelect.WithOptions(targetShellOptions).Show("Select an available playzone type:")
+			if err != nil {
+				pterm.Error.Println("Something went wrong:", err)
+				return
+			}
+			switch {
+			case strings.Contains(selectedPlayzone, "RAW TCP"):
+				command.RawPlayzone(true)
+
+			case strings.Contains(selectedPlayzone, "Modify"):
+				initialize.CheckIfSudo()
+				command.RunCommand()
+
+			case strings.Contains(selectedPlayzone, "Back"):
+				interactiveMode()
+			}
+
 		case selectedOption == "Exit":
 			pterm.Info.Println("Exiting...")
 			os.Exit(1)
@@ -174,6 +203,7 @@ var winFailCmd = &cobra.Command{
 		attacks.LoginFailEventSpam(CFG.count, CFG.domain, CFG.subnet, initialize.HEC_url, CFG.hec_token, CFG.accountName)
 	},
 }
+
 var winProcess = &cobra.Command{
 	Use:   "win_process",
 	Short: "Generate fake commands for target windows",
@@ -193,6 +223,7 @@ var winProcess = &cobra.Command{
 		attacks.ProcessCreateEvent(CFG.domain, CFG.hostname, CFG.targetIp, CFG.processName, CFG.processParameters, CFG.accountName, initialize.HEC_url, CFG.hec_token)
 	},
 }
+
 var nixCommand = &cobra.Command{
 	Use:   "nix_command",
 	Short: "Generate fake commands for target nix",
@@ -207,6 +238,18 @@ var nixCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		attacks.ExecveEventParameterCheck(CFG.execTime)
 		attacks.ExecveEvent(CFG.targetIp, CFG.hostname, CFG.command, initialize.HEC_url, CFG.hec_token)
+	},
+}
+
+var rawTCPCommand = &cobra.Command{
+	Use:   "attack",
+	Short: "Generate log with direct TCP communication to the Indexer. It requires a file.",
+	Long:  `It acts like UF and create a connection with target Indexer based on brand new TCP session.`,
+	PreRun: func(cmd *cobra.Command, args []string) {
+		cmd.MarkFlagRequired("file")
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		attacks.RawEventSenderFile(CFG.file_name)
 	},
 }
 
@@ -284,6 +327,10 @@ func init() {
 	nixCommand.Flags().StringVarP(&CFG.hec_token, "token", "t", "", "HEC token")
 	nixCommand.Flags().StringVar(&CFG.execTime, "exectime", "", "Time to execute (fake) on target.")
 
+	// Add flags specific to attack
+	rawTCPCommand.Flags().SortFlags = false
+	rawTCPCommand.Flags().StringVarP(&CFG.file_name, "file", "f", "", "Log file.")
+
 	// Add general flags
 	rootCmd.Flags().BoolVarP(&CFG.interactive, "interactive", "i", false, "Run the application in interactive mode")
 
@@ -292,7 +339,7 @@ func init() {
 	rootCmd.AddCommand(winProcess)
 	rootCmd.AddCommand(winFailCmd)
 	rootCmd.AddCommand(interactiveCommand)
-	rootCmd.AddCommand(nixCommand)
+	rootCmd.AddCommand(rawTCPCommand)
 
 	// hide default cobra commands:
 	completion := completionCommand()

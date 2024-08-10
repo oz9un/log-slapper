@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"net"
 	"net/http"
 	"strings"
 	"time"
@@ -188,13 +189,17 @@ func GenerateLoginFailedEvent(domain, subnet string, eventTime time.Time, target
 
 // SendLoginEvent sends a generated login event to the Splunk HEC endpoint.
 func SendHECEvent(hecURL, hecToken string, event SplunkEvent) (err error) {
+	if hecToken == "" {
+		return fmt.Errorf("NO HEC TOKEN PROVIDED")
+	}
 	jsonData, err := json.Marshal(event)
 	if err != nil {
-		return err
+		return fmt.Errorf("JSON Marshall error")
 	}
 
 	req, err := http.NewRequest("POST", hecURL, bytes.NewBuffer(jsonData))
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 
@@ -215,6 +220,30 @@ func SendHECEvent(hecURL, hecToken string, event SplunkEvent) (err error) {
 	if resp.StatusCode >= 400 {
 		pterm.Error.Printf("HTTP Error: %d - %s", resp.StatusCode, resp.Status)
 		return fmt.Errorf("HTTP Error: %d - %s", resp.StatusCode, resp.Status)
+	}
+
+	return nil
+}
+
+// sendDataToSplunk sends the formatted data to the Splunk server.
+func SendRawData(helloData, customFieldsData []byte, targetIndexer string) error {
+	conn, err := net.Dial("tcp", targetIndexer)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	if _, err := conn.Write(helloData); err != nil {
+		return err
+	}
+
+	response := make([]byte, 1024)
+	if _, err := conn.Read(response); err != nil {
+		return err
+	}
+
+	if _, err := conn.Write(customFieldsData); err != nil {
+		return err
 	}
 
 	return nil

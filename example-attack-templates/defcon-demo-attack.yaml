@@ -1,0 +1,88 @@
+splunk:
+  target_ip: "10.10.50.55"
+  target_port: "9997"
+
+log:
+  index: "main"
+  source: "/var/log/myapp.log"
+  sourcetype: "my_custom_app"
+  hostname: "defcon-test-32"
+
+extra_fields:
+  machine_id: "726329955b9a4fb99b9a64bd15999999"
+  host_ip: "10.10.13.37"
+  conference: "defcon"
+
+events:
+  - time: "03/03/2026 20:59:59"
+    data: |
+      03/03/2026 08:02:00 PM
+      LogName=Security
+      SourceName=Microsoft Windows security auditing.
+      EventCode=4688
+      EventType=0
+      Type=Information
+      ComputerName=DEFCON-TEST-COMP.com
+      TaskCategory=Process Creation
+      OpCode=Info
+      RecordNumber=5853
+      Keywords=Audit Success
+      Message=A new process has been created.
+
+      Creator Subject:
+        Security ID:		-
+        Account Name:		ozzyadmin
+        Account Domain:		ozgun.com
+        Logon ID:		0x9BB3354DA
+
+      Target Subject:
+        Security ID:
+        Account Name:
+        Account Domain:
+        Logon ID:
+
+      Process Information:
+        New Process ID:		0x1e4
+        New Process Name:	C:\Users\Public\Documents\mimikatz.exe
+        Token Elevation Type:	%1936
+        Mandatory Label:	Mandatory Label\High Mandatory Level
+        Creator Process ID:	0x11f0
+        Creator Process Name:	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+        Process Command Line:	C:\Users\Public\Documents\mimikatz.exe --encrypt='all'
+    
+  # Example of a second event data entry
+  - time: "03/03/2026 21:00:00"
+    data: |
+      03/03/2026 09:00:00 AM
+      LogName=System
+      SourceName=System Monitoring
+      EventCode=5000
+      EventType=1
+      Type=Warning
+      ComputerName=DEFCON-TEST-COMP.com
+      TaskCategory=Application Crash
+      OpCode=Warning
+      RecordNumber=9001
+      Keywords=Application Failure
+      Message=An application has unexpectedly quit.
+
+      Creator Subject:
+        Security ID:		-
+        Account Name:		ozzyadmin
+        Account Domain:		ozgun.com
+        Logon ID:		0x9BB5354DA
+
+      Target Subject:
+        Security ID:
+        Account Name:
+        Account Domain:
+        Logon ID:
+
+      Process Information:
+        New Process ID:		0x1e4
+        New Process Name:	C:\Users\Public\Documents\ozgun.exe
+        Token Elevation Type:	%1936
+        Mandatory Label:	Mandatory Label\High Mandatory Level
+        Creator Process ID:	0x11f0
+        Creator Process Name:	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+        Process Command Line:	C:\Users\Public\Documents\ozgun.exe --decrypt='all'
