@@ -18,6 +18,7 @@ log-slapper can:
 - send logs from future and past (time travelling!)
 - perform HEC based attacks
 - perform built-in attacks like login success/fail login, new process creation events spam in windows
+- perform pre-determined attack scenarios using .yaml
 
 ## installation
 
