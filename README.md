@@ -48,7 +48,7 @@ After the first installation, log-slapper needs to create a log.settings file, a
 <img width="600" alt="resim" src="https://github.com/user-attachments/assets/61a41924-d401-4b47-9baf-3d56293db65b">
 <br>
 <br>
-You can manually create and configure the log.settings file with the necessary details. However, if you have root access, you can start log-slapper with `sudo`, and it will automatically find the target Splunk instance's IP address:
+You can manually enter those details. However, if you have root access, you can start log-slapper with `sudo`, and it will automatically find the target Splunk instance's IP address:
 
 ```sudo ./logslapper```
 
@@ -63,6 +63,8 @@ Besides the interactive menu, you can also select various attack types from the 
 <br>
 <img width="600" alt="resim" src="https://github.com/user-attachments/assets/be2cf827-ed47-4e05-9981-ca237c9c4354">
 <br>
+
+other attack types are explained in the help menu, but if you need more details, you can examine the slides or contact me directly.
 
 ## create your own attack scenarios to execute
 
