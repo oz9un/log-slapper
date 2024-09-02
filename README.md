@@ -10,14 +10,14 @@
 </div>
 
 ## description
-log-slapper is an offensive security tool designed to be used by red-teamers during the post-exploitation phase. It exploits vulnerable SIEM solutions and configurations that allow the injection of arbitrary logs into the target system.
+log-slapper is an offensive security tool designed to be used by red-teamers during the post-exploitation phase. It exploits vulnerable (any Splunk, basically) SIEM solutions and configurations that allow the injection of arbitrary logs into the target system.
 
 log-slapper can:
 - mimic attacks on behalf of any other computer on the network
-- run in interactive mode: Target Shell Playzone
-- send logs from future and past
+- run in interactive mode: Target Shell Playzone 
+- send logs from future and past (time travelling!)
 - perform HEC based attacks
-- perform built-in attacks like login success/fail spam, new process creations in windows
+- perform built-in attacks like login success/fail login, new process creation events spam in windows
 
 ## installation
 
@@ -36,7 +36,6 @@ sudo apt install libpcap-dev
 go build .
 ```
 
-By following these steps, you should be able to compile and run log-slapper without any issues.
 
 ## usage
 
@@ -46,21 +45,23 @@ After the first installation, log-slapper needs to create a log.settings file, a
 - HEC Token: Optional, in case you have a HEC token of the target instance.
 
 <img width="600" alt="resim" src="https://github.com/user-attachments/assets/61a41924-d401-4b47-9baf-3d56293db65b">
-
-
+<br>
+<br>
 You can manually create and configure the log.settings file with the necessary details. However, if you have root access, you can start log-slapper with `sudo`, and it will automatically find the target Splunk instance's IP address:
 ```sudo ./logslapper```
-
-
+<br>
+<br>
 <img width="600" alt="resim" src="https://github.com/user-attachments/assets/50f57212-ad01-4fd7-8982-62868e8134a6">
-
-
+<br>
+<br>
 After that, you can select the attack type you want from the interactive menu.
-
-
+<br>
+<br>
 Besides the interactive menu, you can also select various attack types from the help menu and ran them directly:
-
+<br>
+<br>
 <img width="600" alt="resim" src="https://github.com/user-attachments/assets/be2cf827-ed47-4e05-9981-ca237c9c4354">
+<br>
 
 ## example attack showcase with templates
 
@@ -83,7 +84,7 @@ There is also a custom chatgpt called "windows event genie", it's just created f
 
 <img width="460" alt="resim" src="https://github.com/user-attachments/assets/46d36531-3395-4b59-80e5-a8b756637816">
 
-link for the event genie: https://chatgpt.com/g/g-UpEG7btn2-windows-event-log-genie
+[Go to the Event Genie](https://chatgpt.com/g/g-UpEG7btn2-windows-event-log-genie)
 
 ## about the research & tool
 This tool has been showcased at several security conferences, including:
@@ -99,6 +100,9 @@ The latest and most powerful version of log-slapper, along with the comprehensiv
 <img width="400" align="center" alt="image"  src="https://github.com/user-attachments/assets/655344d4-fea9-4cac-abbb-1fddabfe9771">
 </p>
 <br>
+
+Now, DEFCON32 slides are publicly available! : 
+[The SIEMless Hack: Rewriting Reality with Log Injection](https://github.com/oz9un/log-slapper/blob/main/DEF%20CON%2032%20-%20Red%20Team%20Village%20-%20Ozgun%20Kultekin%20-%20The%20SIEMless%20Hack%20Rewriting%20Reality%20with%20Log%20Injection.pdf)
 
 
 ## changelog: diff between v2 and v1
