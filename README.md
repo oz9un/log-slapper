@@ -48,9 +48,9 @@ After the first installation, log-slapper needs to create a log.settings file, a
 <br>
 <br>
 You can manually create and configure the log.settings file with the necessary details. However, if you have root access, you can start log-slapper with `sudo`, and it will automatically find the target Splunk instance's IP address:
+
 ```sudo ./logslapper```
-<br>
-<br>
+
 <img width="600" alt="resim" src="https://github.com/user-attachments/assets/50f57212-ad01-4fd7-8982-62868e8134a6">
 <br>
 <br>
@@ -63,7 +63,7 @@ Besides the interactive menu, you can also select various attack types from the 
 <img width="600" alt="resim" src="https://github.com/user-attachments/assets/be2cf827-ed47-4e05-9981-ca237c9c4354">
 <br>
 
-## example attack showcase with templates
+## create your own attack scenarios to execute
 
 log-slapper allows you to create custom attack scenarios, which can be collected in a single log file (using YAML format) and then provided as input to the tool. With this way, you can basically create any attack scenario in your mind and inject them into the target Splunk instance.
 
