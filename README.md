@@ -1,6 +1,6 @@
 # log-slapper 🪵🪓👹
 <p align="center">
-<img width="600" align="center" alt="image"  src="https://github.com/user-attachments/assets/ef823bcb-14e6-40d2-a880-ea3572cdda46">
+<img width="600" align="center" alt="image"  src="https://github.com/oz9un/log-slapper/blob/main/images/sticker.png">
 </p>
 <br>
 
@@ -45,14 +45,14 @@ After the first installation, log-slapper needs to create a log.settings file, a
 - Indexer/HF's IP Address: This is where the logs will be injected.
 - HEC Token: Optional, in case you have a HEC token of the target instance.
 
-<img width="600" alt="resim" src="https://github.com/user-attachments/assets/61a41924-d401-4b47-9baf-3d56293db65b">
+<img width="600" alt="resim" src="https://github.com/oz9un/log-slapper/blob/main/images/ss1.png">
 <br>
 <br>
 You can manually enter those details. However, if you have root access, you can start log-slapper with `sudo`, and it will automatically find the target Splunk instance's IP address:
 
 ```sudo ./logslapper```
 
-<img width="600" alt="resim" src="https://github.com/user-attachments/assets/50f57212-ad01-4fd7-8982-62868e8134a6">
+<img width="600" alt="resim" src="https://github.com/oz9un/log-slapper/blob/main/images/ss2.png">
 <br>
 <br>
 After that, you can select the attack type you want from the interactive menu.
@@ -61,7 +61,7 @@ After that, you can select the attack type you want from the interactive menu.
 Besides the interactive menu, you can also select various attack types from the help menu and ran them directly:
 <br>
 <br>
-<img width="600" alt="resim" src="https://github.com/user-attachments/assets/be2cf827-ed47-4e05-9981-ca237c9c4354">
+<img width="600" alt="resim" src="https://github.com/oz9un/log-slapper/blob/main/images/s3.png">
 <br>
 
 other attack types are explained in the help menu, but if you need more details, you can examine the slides or contact me directly.
@@ -85,7 +85,7 @@ For the example attack_templates, have a look at the "example-attack-templates" 
 
 There is also a custom chatgpt called "windows event genie", it's just created for to help you along creating windows attack scenarios. You can describe the attack you want to inject and it will create a .yaml for you:
 
-<img width="460" alt="resim" src="https://github.com/user-attachments/assets/46d36531-3395-4b59-80e5-a8b756637816">
+<img width="460" alt="resim" src="https://github.com/oz9un/log-slapper/blob/main/images/ss4.png">
 
 [Go to the Event Genie](https://chatgpt.com/g/g-UpEG7btn2-windows-event-log-genie)
 
@@ -100,7 +100,7 @@ The latest and most powerful version of log-slapper, along with the comprehensiv
 <br>
 
 <p align="center">
-<img width="400" align="center" alt="image"  src="https://github.com/user-attachments/assets/655344d4-fea9-4cac-abbb-1fddabfe9771">
+<img width="400" align="center" alt="image"  src="https://github.com/oz9un/log-slapper/blob/main/images/ss5.png">
 </p>
 <br>
 
